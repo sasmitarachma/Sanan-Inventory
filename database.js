@@ -121,7 +121,7 @@ export async function insertGudang(idBarang,qty,tglProduksi,tglMasuk){
     // let tglProduksi = generateProduction(tglExpired)
 
 
-    const [returnInsertGudangDate]= await pool.query("UPDATE tb_gudang SET quantity = quantity + ? where tanggal_expired = ? AND id_barang = ?",[qty,tglExpired,idBarang])
+    const [returnInsertGudangDate]= await pool.query("UPDATE tb_gudang SET quantity = quantity + ? where tanggal_expired = ? AND id_barang = ? ",[qty,tglExpired,idBarang])
     // console.log(returnInsertGudangDate)
     let {affectedRows} = returnInsertGudangDate
     // console.log(affectedRows)
@@ -286,13 +286,13 @@ export async function getTampilBarang(){
 
 //tampil barang masuk
 export async function getTampilBarangMasuk(){
-    const [rows] = await pool.query("SELECT tb_barang_masuk.id, tb_barang_masuk.idBarang, tb_barang.nama_barang, tb_barang_masuk.id_gudang, tb_barang_masuk.quantity, tb_barang_masuk.tanggal FROM tb_barang_masuk INNER JOIN tb_barang ON tb_barang_masuk.idBarang=tb_barang.id")
+    const [rows] = await pool.query("SELECT tb_barang_masuk.id, tb_barang_masuk.id_barang, tb_barang.nama_barang, tb_barang_masuk.id_gudang, tb_barang_masuk.quantity, tb_barang_masuk.tanggal_masuk FROM tb_barang_masuk INNER JOIN tb_barang ON tb_barang_masuk.id_barang=tb_barang.id order by tb_barang_masuk.id DESC")
     return rows
     
 }
 //tampil gudang
 export async function getTampilGudang(){
-    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id")
+    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id DESC")
     return rows
 }
 //tampil barang keluar

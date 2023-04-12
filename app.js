@@ -143,7 +143,7 @@ app.get("/produk",async (req,res)=>{
 
 // Tampil Stok Masuk
 app.get("/stok-masuk", async (req,res)=>{
-    let datas = await getBarangMasuk()
+    let datas = await getTampilBarangMasuk()
     res.render("stok-masuk",{datas})
 })
 
