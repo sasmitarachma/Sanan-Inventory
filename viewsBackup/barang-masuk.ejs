@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barang Masuk</title>
+  </head>
+  <body>
+    <form method="post" action="/barang-masuk">
+      <input type="text" name="idBarang" value="<%=result.id%>" />
+      <h3>Nama</h3>
+      <input
+        type="text"
+        name="namaBarang"
+        disabled
+        value="<%=result.nama_barang%>"
+      />
+      <h3>Tanggal Produksi</h3>
+      <input type="date" name="tglProduksi" />
+      <h3>Tanggal Masuk</h3>
+      <input type="date" name="tglMasuk" />
+      <h3>Quantity</h3>
+      <input type="number" name="quantity" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buat Barang</title>
+  </head>
+  <body>
+    <form method="post" action="/buat-barang-baru">
+      <h3>Nama</h3>
+      <input type="text" name="namaBarang" />
+      <h3>Tipe</h3>
+      <select name="kategori" id="kategori">
+        <option value="Produksi Sendiri">Produksi Sendiri</option>
+        <option value="Supplier">Supplier</option>
+      </select>
+      <h3>Harga</h3>
+      <input type="number" name="harga" />
+      <input type="text" name="barangImg" value="null" style="display: none" />
+      <input type="text" name="qrCodeImg" value="null" style="display: none" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

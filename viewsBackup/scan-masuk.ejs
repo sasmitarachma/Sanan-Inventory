@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scan Barcode</title>
+  </head>
+  <body>
+    <form id="form" action="/scan-masuk" method="POST">
+      <input id="input" type="text" name="test" style="display: none" data />
+      <!-- <button type="submit">SUBMIT</button> -->
+    </form>
+    <div id="reader" width="600px"></div>
+    <script
+      src="https://unpkg.com/html5-qrcode"
+      type="text/javascript"
+    ></script>
+    <script>
+      const input = document.getElementById("input");
+      const form = document.getElementById("form");
+
+      function onScanSuccess(decodedText, decodedResult) {
+        // handle the scanned code as you like, for example:
+        let inputValue = decodedText;
+        // inputValue = JSON.parse(decodedText);
+        input.value = inputValue;
+        // alert(inputValue);
+        form.submit();
+
+        html5QrcodeScanner.clear();
+        // alert(`Code matched = ${decodedText}`, decodedResult);
+      }
+
+      function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning.
+        // for example:
+        console.warn(`Code scan error = ${error}`);
+      }
+
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        /* verbose= */ false
+      );
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+  </body>
+</html>
