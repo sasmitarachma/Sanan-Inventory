@@ -185,6 +185,11 @@ app.post("/scan-masuk", async (req,res)=>{
 
 })
 
+// Delete Stok Masuk
+app.post("/delete-stok-masuk", async (req,res)=>{
+    res.send("posted")
+})
+
 // Barang Masuk
 app.get("/barang-masuk", async (req,res)=>{
     let result = await getBarangScan(req.query.id)
@@ -222,11 +227,12 @@ app.get("/scan-keluar", async (req,res)=>{
 
 
 app.post("/scan-keluar", async (req,res)=>{
-    let finalData = JSON.stringify(req.body.test)
+    let finalData = JSON.stringify(req.body.qrValue)
+    console.log(finalData)
     finalData = finalData.replace(/\\/g, "")
 
 
-    let toJson = JSON.parse(req.body.test)
+    let toJson = JSON.parse(req.body.qrValue)
 
 
     // JSON Validator

@@ -297,7 +297,7 @@ export async function getTampilGudang(){
 }
 //tampil barang keluar
 export async function getTampilBarangKeluar(){
-    const [rows] = await pool.query("SELECT tb_barang_keluar.id_barang, tb_barang.nama_barang, tb_barang_keluar.id_gudang, tb_barang_keluar.quantity,tb_barang_keluar.id, tb_barang_keluar.tanggal_keluar FROM tb_barang_keluar INNER JOIN tb_barang ON tb_barang_keluar.id_barang=tb_barang.id")
+    const [rows] = await pool.query("SELECT tb_barang_keluar.id_barang, tb_barang.nama_barang, tb_barang_keluar.id_gudang, tb_barang_keluar.quantity,tb_barang_keluar.id, tb_barang_keluar.tanggal_keluar FROM tb_barang_keluar INNER JOIN tb_barang ON tb_barang_keluar.id_barang=tb_barang.id order by tb_barang_keluar.id DESC")
     return rows
 }
 //tampil laporan

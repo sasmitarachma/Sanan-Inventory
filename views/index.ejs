@@ -654,8 +654,9 @@
                   <th class="px-4 py-3">Jenis Produksi</th>
                   <th class="px-4 py-3">Harga</th>
                   <th class="px-4 py-3">Quantity</th>
-                  <th class="px-4 py-3">Foto Produk</th>
-                  <th class="px-4 py-3">QR Code</th>
+                  <!-- <th class="px-4 py-3">Tanggal Produ</th> -->
+                  <th class="px-4 py-3">Tanggal Produksi</th>
+                  <th class="px-4 py-3">Tanggal Expired</th>
                   <th class="px-4 py-3">Actions</th>
                 </tr>
               </thead>
@@ -688,10 +689,12 @@
                   <%= data.quantity %>
                 </td>
                 <td class="px-4 py-3 text-sm">
-                  <img src="<%= data.barang_img %>" alt="" width="150em" height="150em">
+                  <%= data.tanggal_produksi %>
+                  <!-- <img src="<%= data.barang_img %>" alt="" width="150em" height="150em"> -->
                 </td>
                 <td class="px-4 py-3 text-sm">
-                  <img src="<%= data.qrcode_img %>" alt="" width="60%">
+                  <!-- <img src="<%= data.qrcode_img %>" alt="" > -->
+                  <%= data.tanggal_expired %>
                   <!-- <%= data.qrcode_img %> -->
                 </td>
                 <td class="px-4 py-3">
