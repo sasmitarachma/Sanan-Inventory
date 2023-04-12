@@ -40,7 +40,7 @@ app.use(express.static('public'))
 import qr, { toDataURL } from "qrcode"
 
 // Import DB
-import { createBarangBaru, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangScan, getExpired, insertGudang, outGudang, updatePathBarang } from "./database.js";
+import { createBarangBaru, deleteBarangMasuk, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangScan, getExpired, insertGudang, outGudang, updatePathBarang } from "./database.js";
 
 //faat
 import { getTampilBarang, getTampilBarangMasuk, getTampilGudang, getTampilBarangKeluar,
@@ -187,7 +187,17 @@ app.post("/scan-masuk", async (req,res)=>{
 
 // Delete Stok Masuk
 app.post("/delete-stok-masuk", async (req,res)=>{
-    res.send("posted")
+    const idBarangMasuk = req.body.idBarangMasuk
+    // console.log(req.body.idBarangMasuk)
+    // res.send(req.body.idBarangMasuk)
+    try{
+        await deleteBarangMasuk(idBarangMasuk)
+        res.redirect("/stok-masuk")
+    }
+    catch(e){
+        res.send(e)
+    }
+    
 })
 
 // Barang Masuk

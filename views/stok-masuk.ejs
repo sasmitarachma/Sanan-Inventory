@@ -445,9 +445,9 @@
                               ></path>
                             </svg>
                           </button>
-                          <form action="/stok-masuk" method="post">
-                            <input type="text" value=" <%= data.id %>" name="idBarangMasuk" disabled style="display:none">
-                            <button
+                          <form  action="/delete-stok-masuk" method="post" id="<%=data.id%>">
+                            <input type="text" value=" <%= data.id %>" name="idBarangMasuk" style="display:none">
+                            <button onclick="confirmBox(<%=data.id%>)"
                               class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                               aria-label="Delete" type="submit"
                             >
@@ -572,5 +572,15 @@
         </main>
       </div>
     </div>
+    <script>
+      function confirmBox(idBarang){
+
+        let form = document.getElementById(idBarang)
+        if(confirm("Apakah anda yakin ingin menghapus Stok masuk ?")==true){
+          form.submit()
+          // alert(idBarang)
+        }
+      }
+    </script>
   </body>
 </html>
