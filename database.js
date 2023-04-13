@@ -58,7 +58,7 @@ async function showTransactionItemDate(date,id){
 
 // Get All tb_barang 
 export async function getAllBarang(){
-    const [result] = await pool.query("SELECT * FROM tb_barang")
+    const [result] = await pool.query("SELECT * FROM tb_barang order by id DESC")
     console.log(result)
     return result
   }
@@ -87,7 +87,7 @@ export async function updatePathBarang(idBarang,pathQR,pathImg){
 // Query Get Barang Keluar
 export async function getBarangKeluarDate(){
     const [returnGetBarang]= await pool.query("SELECT * FROM tb_barang_keluar")
-    // console.log(returnGetBarang[0])
+    console.log(returnGetBarang)
     return returnGetBarang
 }
 
@@ -306,7 +306,7 @@ export async function getTampilBarangMasuk(){
 }
 //tampil gudang
 export async function getTampilGudang(){
-    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id DESC")
+    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id ASC")
     return rows
 }
 //tampil barang keluar
@@ -331,7 +331,7 @@ export async function getBarangID(idBarang){
     return rows[0]
 }
 
-export async function updateBarang(idBarang, namaBarang, kategoriBarang, hargaBarang){
+export async function updateBarang(idBarang, namaBarang, kategoriBarang, hargaBarang,gambarBarang){
     const [updatedBarang]= await pool.query("UPDATE tb_barang SET nama_barang = ?, kategori = ?, harga = ? where id = ?",[namaBarang, kategoriBarang, hargaBarang, idBarang])
     return(updatedBarang)
     

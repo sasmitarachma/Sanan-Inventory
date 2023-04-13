@@ -118,20 +118,41 @@ app.get("/chart", async (req,res)=>{
     const data = await getBarangKeluarDate()
     // console.log(data[0].tanggal.getDate())
     let modifiedDate = data.map(function(date){
-        let newDate = date.tanggal
+        let newDate = date.tanggal_keluar
+
         let day = newDate.getDate();
         let month = newDate.getMonth() + 1;
         let year = newDate.getFullYear();
-
+        
         let currentDate = `${year}-${month}-${day}`;
         return currentDate
     })
+    // console.log(data)
     let values = data.map(function(value){
         return(value.quantity)
     })
 
+    const tampilGudang = await getTampilGudang()
+
+    let quantity = tampilGudang.map(function(item){
+        return item.quantity
+    })
+    let nama_barang = tampilGudang.map(function(item){
+       
+        let newDate = item.tanggal_produksi
+
+        let day = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+        
+        let currentDate = `${year}-${month}-${day}`;
+        let newItem = `${item.nama_barang} ${currentDate}`
+        return newItem
+    })
+
+
     // console.log(values)
-    res.render("chartJS",{modifiedDate:modifiedDate,values:values})
+    res.render("chartJS",{modifiedDate:modifiedDate,values:values,nama_barang:nama_barang,quantity:quantity})
 })
 
 // Produk 
@@ -365,7 +386,26 @@ app.get("/produk-expired", async (req,res)=>{
 
 //tampil laporan
 app.get("/laporan", async (req, res)=>{
-    res.render("tampil-laporan.ejs")
+    const tampilGudang = await getTampilGudang()
+
+    let quantity = tampilGudang.map(function(item){
+        return item.quantity
+    })
+    let nama_barang = tampilGudang.map(function(item){
+       
+        let newDate = item.tanggal_produksi
+
+        let day = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+        
+        let currentDate = `${year}-${month}-${day}`;
+        let newItem = `${item.nama_barang} \n ${currentDate}`
+        return newItem
+    })
+
+    res.render("tampil-laporan.ejs",{nama_barang:nama_barang,quantity:quantity})
+
 })
 
 app.post('/laporan-detail', async (req, res) => {
@@ -382,20 +422,22 @@ app.post('/laporan-detail', async (req, res) => {
 
 // +++++ UPDATE +++++
 //detail tampil barang by id -> form barang
-app.get('/data-barang/:idBarang', async (req, res) => { //request / 'get'
+app.get('/update-barang/:idBarang', async (req, res) => { //request / 'get'
     const idBarang = req.params.idBarang
-    const getIDBarang = await getBarangID(idBarang)
-    res.render("update-barang.ejs",{getIDBarang})
+    const data = await getBarangID(idBarang)
+    console.log(data)
+    res.render("update-barang.ejs",{data})
 })
 
 //update barang
-app.post('/update-barang/:idBarang', async (req, res) => { //request / 'post' to thunder client api with id
+app.post('/update-barang/:idBarang', async (req, res) => { 
+    //request / 'post' to thunder client api with id
     const idBarang = req.params.idBarang
-    const namaBarang = req.body.namaBarang
-    const kategoriBarang = req.body.kategoriBarang
-    const hargaBarang = req.body.hargaBarang
-    await updateBarang(idBarang, namaBarang, kategoriBarang, hargaBarang)
-    res.redirect(`/data-barang/${idBarang}`)
+    const {nama_produk,kategori,harga}= req.body
+    console.log(nama_produk)
+    
+    await updateBarang(idBarang, nama_produk, kategori, harga)
+    res.redirect(`/produk`)
 })
 
 //detail tampil barang masuk by id -> form barang masuk
