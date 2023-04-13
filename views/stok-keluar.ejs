@@ -451,7 +451,9 @@
                               ></path>
                             </svg>
                           </button>
-                          <button
+                          <form onsubmit="return confirm('!!PERHATIAN!!\nStok akan kembali ke gudang.\nApakah anda yakin ingin menghapus Stok Keluar ?');" action="/delete-stok-keluar" method="post" id="<%=data.id%>">
+                            <input type="text" value=" <%= data.id %>" name="idBarangKeluar" style="display:none">
+                          <button type="submit"
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Delete"
                           >
@@ -468,6 +470,7 @@
                               ></path>
                             </svg>
                           </button>
+                          </form>
                         </div>
                       </td>
                     </tr>

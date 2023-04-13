@@ -445,7 +445,7 @@
                               ></path>
                             </svg>
                           </button>
-                          <form  action="/delete-stok-masuk" method="post" id="<%=data.id%>">
+                          <form onsubmit="return confirm('!!PERHATIAN!!\nStok yang berkaitan pada Gudang dan Stok Keluar akan ikut terhapus.\nApakah anda yakin ingin menghapus Stok masuk ?');" action="/delete-stok-masuk" method="post" id="<%=data.id%>">
                             <input type="text" value=" <%= data.id %>" name="idBarangMasuk" style="display:none">
                             <button onclick="confirmBox(<%=data.id%>)"
                               class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
@@ -573,14 +573,16 @@
       </div>
     </div>
     <script>
-      function confirmBox(idBarang){
-
-        let form = document.getElementById(idBarang)
-        if(confirm("Apakah anda yakin ingin menghapus Stok masuk ?")==true){
-          form.submit()
-          // alert(idBarang)
-        }
-      }
+      // function confirmBox(idBarang){
+      //   let form = document.getElementById(idBarang)
+      //   if(confirm("!!PERHATIAN!!\nStok yang berkaitan pada Gudang dan Stok Keluar akan ikut terhapus.\nApakah anda yakin ingin menghapus Stok masuk ?")==true){
+      //     // form.submit()
+      //     alert(idBarang)
+      //   }else{
+      //     alert("Anda gagal menghapus stok masuk.")
+      //     window.location.href = "/stok-masuk";
+      //   }
+      // }
     </script>
   </body>
 </html>

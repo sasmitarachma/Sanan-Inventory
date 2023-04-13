@@ -155,7 +155,7 @@ export async function outGudang(idBarang,qty,tglExpired,tglKeluar){
     let status = false;
     // Get ID Barang Gudang
         const [returnGetItem]= await pool.query("SELECT * FROM tb_gudang where tanggal_expired = ? AND id_barang = ?",[tglExpired,idBarang])
-        if(returnGetItem[0].quantity > 0){
+        if(returnGetItem[0].quantity > 0 && returnGetItem[0].quantity>= qty){
 
         // Update Barang Gudang
         const [returnUpdateGudang]= await pool.query("UPDATE tb_gudang SET quantity = quantity - ? where tanggal_expired = ? AND id_barang = ?",[qty,tglExpired,idBarang])
@@ -192,8 +192,20 @@ export async function deleteGudangAll(idGudang){
 }
 // deleteGudangAll(12)
 
-// Delete Barang Masuk
+
+// Delete Barang Masuk V2
 export async function deleteBarangMasuk(idBarangMasuk){
+    const [resultGetBarangMasuk] = await pool.query("SELECT * FROM tb_barang_masuk where id = ?",[idBarangMasuk])
+
+    let idGudang = resultGetBarangMasuk[0].id_gudang
+    await pool.query("DELETE FROM tb_barang_masuk WHERE id_gudang = ?",[idGudang])
+    await pool.query("DELETE FROM tb_barang_keluar WHERE id_gudang = ?",[idGudang])
+    const [result]=await pool.query("DELETE FROM tb_gudang WHERE id = ?",[idGudang])
+    console.log(result)
+}
+
+// Delete Barang Masuk Deprecated
+export async function deleteBarangMasukDeprecated(idBarangMasuk){
     // const [resultGetBarangMasuk] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang_masuk ON tb_gudang.id=tb_barang_masuk.id_gudang where tb_barang_masuk.id = ?",[idBarangMasuk])
     const [resultGetBarangMasuk] = await pool.query("SELECT * FROM tb_barang_masuk where id = ?",[idBarangMasuk])
 
@@ -207,6 +219,8 @@ export async function deleteBarangMasuk(idBarangMasuk){
 
     //  Delete Query 
     await pool.query("DELETE FROM tb_barang_masuk WHERE id= ?",[idBarangMasuk])
+
+
     console.log(newQuantity)
 }
 // Delete Barang Keluar

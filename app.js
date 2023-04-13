@@ -40,7 +40,7 @@ app.use(express.static('public'))
 import qr, { toDataURL } from "qrcode"
 
 // Import DB
-import { createBarangBaru, deleteBarangMasuk, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangScan, getExpired, insertGudang, outGudang, updatePathBarang } from "./database.js";
+import { createBarangBaru, deleteBarangKeluar, deleteBarangMasuk, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangScan, getExpired, insertGudang, outGudang, updatePathBarang } from "./database.js";
 
 //faat
 import { getTampilBarang, getTampilBarangMasuk, getTampilGudang, getTampilBarangKeluar,
@@ -302,6 +302,21 @@ app.post("/barang-keluar", async (req,res)=>{
     }
     
 
+})
+
+// Delete Stok Keluar
+app.post("/delete-stok-keluar", async (req,res)=>{
+    const idBarangKeluar = req.body.idBarangKeluar
+    // console.log(req.body.idBarangMasuk)
+    // res.send(req.body.idBarangMasuk)
+    try{
+        await deleteBarangKeluar(idBarangKeluar)
+        res.redirect("/stok-keluar")
+    }
+    catch(e){
+        res.send(e)
+    }
+    
 })
 
 // // Tampil Stok
