@@ -244,11 +244,23 @@ export async function getExpired(){
     const date = new Date();
     date.setMonth(date.getMonth()+4)
     // SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id;
-    const [result] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where MONTH(tanggal_expired) = ?;",[date.getMonth()])
-    return result
+    const [result] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where MONTH(tanggal_expired) <= ? ORDER BY tanggal_expired ASC",[date.getMonth()])
+    const newDate = new Date(result.tanggal_expired)
     console.log(result)
+    result.forEach((data)=> {
+        console.log(data.nama_barang) 
+        console.log(data.tanggal_expired.getMonth())
+        console.log(date.getMonth())
+
+        const newMonth = new Date()
+        const finalMonth =data.tanggal_expired.getMonth()-newMonth.getMonth()
+        data.bulanExp= finalMonth 
+    })
+    // console.log(result[0].tanggal_expired.getMonth())
+    return result
+    
 }
-getExpired()
+// getExpired()
 
 // deleteBarangMasuk(15)
 // deleteBarangKeluar(14)
@@ -315,8 +327,9 @@ export async function getTampilBarangKeluar(){
     return rows
 }
 //tampil laporan
-export async function getTampilLaporan(tanggal_produksi, tanggal_expired){
-    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? AND tb_gudang.tanggal_expired <= ?", [tanggal_produksi, tanggal_expired])
+export async function getTampilLaporan(tanggal_produksi, tanggal_produksi2){
+    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? OR tb_gudang.tanggal_produksi <= ?", [tanggal_produksi, tanggal_produksi2])
+    console.log(tanggal)
     return tanggal
 }
 // getTampilLaporan('2023-04-10', '2023-04-17');
@@ -378,3 +391,5 @@ export async function updateGudang(idGudang, idBarang, namaBarang, quantity, tan
 // showAllTransactionDate("2023-02-19")
 // showTransactionItemDate("2023-02-19",1)
 
+
+// getTampilLaporan("2023-04-09", "2023-04-16")
