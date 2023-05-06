@@ -354,6 +354,34 @@ app.get("/produk-expired", async (req,res)=>{
     res.render("produk-expired",{results})
 })
 
+// === Experiment on New Add Route
+app.post("/newPost", async (req,res)=>{
+    const {idBarang,expDate} = req.body
+    
+    // console.log(barang)
+    let content = `{"id":"${barang.insertId}","nama_barang":"${namaBarang}","kategori":"${kategori}","harga":"${harga}"}`
+    if (content.length === 0) res.send("Empty Data!");
+
+    let qrPath = `qrcode-img/${barang.insertId}.png`
+
+    qr.toFile(`${__dirname}/public/${qrPath}`,content,(err, src) =>{
+        if (err) res.send("Error occured");
+    })
+
+    // Update Path
+    updatePathBarang(barang.insertId,qrPath,barangPath)
+
+
+    qr.toDataURL(content, (err, src) => {
+        if (err) res.send("Error occured");
+        
+        // const buf = new Buffer(src)
+        // addImage(barang.id, buf)
+
+        res.redirect("/produk")
+    });
+})
+
 // ==== DEWA SAMPAI SINI ====
 
 // ____ FAAT KE BAWAH ____
@@ -415,8 +443,6 @@ app.post('/laporan-detail', async (req, res) => {
     res.render("tampil-laporan-detail.ejs", {tampilLaporan})
     console.log(tampilLaporan)
 })
-
-
 
 
 

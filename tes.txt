@@ -1,3 +1,0 @@
-this is upload from github
-
-this is added from local repo.
