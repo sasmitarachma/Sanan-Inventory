@@ -40,7 +40,7 @@ app.use(express.static('public'))
 import qr, { toDataURL } from "qrcode"
 
 // Import DB
-import { createBarangBaru, deleteBarangKeluar, deleteBarangMasuk, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangMasukID, getBarangScan, getExpired, getTampilGudangID, insertGudang, outGudang, updatePathBarang } from "./database.js";
+import { createBarangBaru, deleteBarangKeluar, deleteBarangMasuk, getAllBarang, getBarangKeluarDate, getBarangMasuk, getBarangMasukID, getBarangScan, getExpired, getTampilGudangID, insertGudang, outGudang, updatePathBarang, updatePathBarangMasuk } from "./database.js";
 
 //faat
 import { getTampilBarang, getTampilBarangMasuk, getTampilGudang, getTampilBarangKeluar,
@@ -277,19 +277,22 @@ app.post("/barang-masuk", async (req,res)=>{
         let idGudang = await insertGudang(idBarang,quantity)
 
         const [barang] = await getTampilGudangID(idGudang)
-        console.log("barang=" + barang)
+        // console.log("barang=" + barang)
+        if(idGudang>-1){
+            let content = `{"id_barang":"${barang.id}","id_gudang":"${barang.id_gudang}","nama_barang":"${barang.nama_barang}","kategori":"${barang.kategori}","harga":"${barang.harga}","tanggal_produksi":"${barang.tanggal_produksi}","tanggal_expired":"${barang.tanggal_expired}"}`
+            if (content.length === 0) res.send("Empty Data!");
+        
+            let qrPath = `gudang-qr-img/${idGudang}.png`
+        
+            qr.toFile(`${__dirname}/public/${qrPath}`,content,(err, src) =>{
+                if (err) res.send("Error occured");
+            })
+                    
+            updatePathBarangMasuk(idGudang,qrPath)
+    }
+   
 
-        let content = `{"id":"${barang.id}","nama_barang":"${barang.nama_barang}","kategori":"${barang.kategori}","harga":"${barang.harga}","tanggal_produksi":"${barang.tanggal_produksi}"}`
-        if (content.length === 0) res.send("Empty Data!");
-    
-        let qrPath = `gudang-qr-img/${idGudang}.png`
-     
-        qr.toFile(`${__dirname}/public/${qrPath}`,content,(err, src) =>{
-            if (err) res.send("Error occured");
-        })
-
-        res.json(barang)
-    
+        res.redirect("/")
     
 })
 
@@ -311,7 +314,6 @@ app.get("/scan-keluar", async (req,res)=>{
 
 app.post("/scan-keluar", async (req,res)=>{
     let finalData = JSON.stringify(req.body.qrValue)
-    console.log(finalData)
     finalData = finalData.replace(/\\/g, "")
 
 
@@ -323,9 +325,10 @@ app.post("/scan-keluar", async (req,res)=>{
         id:{type:"string"},
         nama_barang:{type:"string"},
         kategori:{type:"string"},
-        harga:{type:"string"}
+        harga:{type:"string"},
+        tanggal_produksi:{type:"string"}
         },
-        required: ["id", "nama_barang", "kategori", "harga"],
+        required: ["id", "nama_barang", "kategori", "harga","tanggal_produksi"],
         additionalProperties: false
     }
     const validate = ajv.compile(schema)
@@ -336,6 +339,7 @@ app.post("/scan-keluar", async (req,res)=>{
         console.log(validate.errors)
     }
     else{
+        res.json(toJson)
         let string = encodeURIComponent(toJson.id);
         res.redirect('/barang-keluar/?id=' + string);
     }

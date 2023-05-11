@@ -104,15 +104,23 @@ export async function insertGudang(idBarang,qty){
     // console.log(insertId)
     return insertId
     
-    }else{
+    }
+    else{
         const [returnGetGudangDate]= await pool.query("SELECT * FROM tb_gudang where tanggal_expired = ? AND id_barang = ?",[tglExpired,idBarang])
 
-        const [returnInsertMasukDate]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnGetGudangDate[0].id,qty,tglMasuk, idBarang])
-
-
+        const [returnInsertMasukDate]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnGetGudangDate[0].id,qty,getDateNow(), idBarang])
+        console.log("no update !")
+        return -1
         // console.log(returnInsertMasukDate)
     }
 }
+
+// Update Add Path Barang
+export async function updatePathBarangMasuk(idGudang,pathQR){
+    const [returnPath] = await pool.query("UPDATE tb_gudang SET gudang_qrcode = ? where id = ?",[pathQR,idGudang])
+    console.log(returnPath)
+}
+
 
 // Query Barang Keluar
 export async function outGudang(idBarang,qty,tglExpired,tglKeluar){
@@ -281,9 +289,10 @@ export async function getTampilBarangMasuk(){
 }
 //tampil barang masuk
 export async function getTampilGudangID(idBarangMasuk){
-    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where tb_gudang.id = ?",[idBarangMasuk])
+    const [rows] = await pool.query("SELECT *, tb_gudang.id as id_gudang FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where tb_gudang.id = ?",[idBarangMasuk])
     return rows 
 }
+
 //tampil gudang
 export async function getTampilGudang(){
     const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id ASC")
