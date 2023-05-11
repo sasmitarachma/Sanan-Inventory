@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanan Inventory | Scan Barang Masuk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://unpkg.com/html5-qrcode"
+      type="text/javascript"
+    ></script>
+
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: "Source Sans Pro", sans-serif;
+      }
+      main {
+        /* color: white; */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* background-color: rgb(17 24 39); */
+      }
+      #reader {
+        width: 600px;
+      }
+      #result {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="reader"></div>
+      <form id="form" action="/scan" method="POST">
+        <input
+          id="input"
+          type="text"
+          name="qrValue"
+          style="display: none"
+          data
+        />
+        <!-- <button type="submit">SUBMIT</button> -->
+      </form>
+    </main>
+
+    <script>
+      const input = document.getElementById("input");
+      const form = document.getElementById("form");
+
+      function onScanSuccess(decodedText, decodedResult) {
+        // handle the scanned code as you like, for example:
+        let inputValue = decodedText;
+        // inputValue = JSON.parse(decodedText);
+        input.value = inputValue;
+        // alert(inputValue);
+        form.submit();
+
+        html5QrcodeScanner.clear();
+        // alert(`Code matched = ${decodedText}`, decodedResult);
+      }
+
+      function onScanFailure(error) {
+        // handle scan failure, usually better to ignore and keep scanning.
+        // for example:
+        console.warn(`Code scan error = ${error}`);
+      }
+
+      let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        /* verbose= */ false
+      );
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+  </body>
+</html>

@@ -17,7 +17,7 @@ export async function getAllBarang(){
     const [result] = await pool.query("SELECT * FROM tb_barang order by id DESC")
     console.log(result)
     return result
-  }
+}
 
 
 // Query Masukkan Barang Baru
@@ -83,7 +83,7 @@ export async function insertGudang(idBarang,qty){
 
     // === Production Generator ===
     // let tglProduksi = generateProduction(tglExpired)
-    console.log(tglExpired)
+    // console.log(tglExpired)
 
     const [returnInsertGudangDate]= await pool.query("UPDATE tb_gudang SET quantity = quantity + ? where tanggal_expired = ? AND id_barang = ? ",[qty,tglExpired,idBarang])
     // console.log(returnInsertGudangDate)
@@ -92,16 +92,16 @@ export async function insertGudang(idBarang,qty){
     
     if(affectedRows == 0){
 
-    const [returnInsertGudang]= await pool.query("INSERT INTO tb_gudang (id_barang, quantity, tanggal_produksi, tanggal_expired) VALUES (?, ?, ?, ?)",[idBarang,qty,tglProduksi, tglExpired])
+    const [returnInsertGudang]= await pool.query("INSERT INTO tb_gudang (id_barang, quantity, tanggal_produksi, tanggal_expired) VALUES (?, ?, ?, ?)",[idBarang,qty,getDateNow(),tglExpired])
     
     // console.log(returnInsertGudang)
 
     // Insert to tb_barang_masuk
-    const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnInsertGudang.insertId,qty,tglMasuk,idBarang])
+    const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnInsertGudang.insertId,qty,getDateNow(),idBarang])
 
     // const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk) VALUES (?, ?, ?, ?)",[returnInsertGudang.insertId,qty,getDateNow(), idBarang])
     let {insertId} =returnInsertGudang
-    console.log(insertId)
+    // console.log(insertId)
     return insertId
     
     }else{

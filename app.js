@@ -162,6 +162,46 @@ app.get("/produk",async (req,res)=>{
     res.render("produk",{datas})
 })
 
+// Scan Barang
+app.get("/scan", async (req,res)=>{
+    res.render("scan-barang")
+})
+
+// Post Scan Barang
+app.post("/scan", async (req,res)=>{
+    let finalData = JSON.stringify(req.body.qrValue)
+    finalData = finalData.replace(/\\/g, "")
+
+
+    let toJson = JSON.parse(req.body.qrValue)
+
+
+    // JSON Validator
+    const schema = {type:"object",properties:{
+        id:{type:"string"},
+        nama_barang:{type:"string"},
+        kategori:{type:"string"},
+        harga:{type:"string"},
+        tanggal_produksi:{type:"string"}
+        },
+        required: ["id", "nama_barang", "kategori", "harga","tanggal_produksi"],
+        additionalProperties: false
+    }
+    const validate = ajv.compile(schema)
+
+    const valid = validate(toJson)
+    if(!valid){
+        res.send("QR Invalid !")
+        console.log(validate.errors)
+    }
+    else{
+        res.json(toJson)
+        // let string = encodeURIComponent(toJson.id);
+        // res.redirect('/barang-masuk/?id=' + string);
+    }
+})
+
+
 // Tampil Stok Masuk
 app.get("/stok-masuk", async (req,res)=>{
     let datas = await getTampilBarangMasuk()
@@ -172,6 +212,7 @@ app.get("/stok-masuk", async (req,res)=>{
 app.get("/scan-masuk", async (req,res)=>{
     res.render("scan-masuk.ejs")
 })
+
 
 
 app.post("/scan-masuk", async (req,res)=>{
@@ -223,32 +264,32 @@ app.post("/delete-stok-masuk", async (req,res)=>{
 
 // Barang Masuk
 app.get("/barang-masuk", async (req,res)=>{
-    let result = await getBarangScan(req.query.id)
+    let result = await getAllBarang()
     res.render("barang-masuk",{result})
 })
 
 app.post("/barang-masuk", async (req,res)=>{
-    const {idBarang,quantity,tglProduksi,tglMasuk} = req.body
 
-    try{
-        let idGudang = await insertGudang(idBarang,quantity,tglProduksi,tglMasuk)
+    const {idBarang,quantity} = req.body
+
+    
+        // console.log(idBarang)
+        let idGudang = await insertGudang(idBarang,quantity)
 
         const [barang] = await getTampilGudangID(idGudang)
+        console.log("barang=" + barang)
 
         let content = `{"id":"${barang.id}","nama_barang":"${barang.nama_barang}","kategori":"${barang.kategori}","harga":"${barang.harga}","tanggal_produksi":"${barang.tanggal_produksi}"}`
         if (content.length === 0) res.send("Empty Data!");
     
-        let qrPath = `gudang-qr-img/${barang.id}.png`
+        let qrPath = `gudang-qr-img/${idGudang}.png`
      
         qr.toFile(`${__dirname}/public/${qrPath}`,content,(err, src) =>{
             if (err) res.send("Error occured");
         })
 
         res.json(barang)
-    }
-    catch(e){
-        res.send(e)
-    }
+    
     
 })
 
