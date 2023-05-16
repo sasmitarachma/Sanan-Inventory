@@ -226,28 +226,34 @@
               Stok Keluar | Input Stok Keluar
             </h2>
               <form action="/barang-keluar" method="post">
-                <input type="text" name="idBarang" value="<%=result.id%>" style="display: none;"/>
+                <input type="text" name="idGudang" value="<%=result.id_gudang%>" style="display: none;"/>
                 <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
                   <div>
                     <label for="namaBarang" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Nama Produk</label>
                     <input type="text" id="namaBarang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="<%=result.nama_barang%>" disabled>
                   </div>
                   <div>
-                      <label for="tglExpired" class="mt-4 block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Tanggal Expired (Samakan dengan Tanggal Expired yang ada di gudang)</label>
+                      <label for="tglExpired" class="mt-4 block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Tanggal Expired</label>
                       <div class="flex flex-nowrap pb-8">
-                        <div class="basis-1/2"><input type="date" name="tglExpired"  class="flex-auto w-80 h-10"></div>
+                        <div class="basis-1/2">
+                          <p class="text-white"><%=result.tanggal_expired%></p>
+                        </div>
                       </div>
                   </div>
                 
                   <div>
-                      <label for="tglMasuk" class=" block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Tanggal Keluar</label>
+                      <!-- <label for="tglMasuk" class=" block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Tanggal Keluar</label>
                       <div class="flex flex-nowrap pb-8 ">
                         <div class="basis-1/2 "><input type="date" name="tglKeluar"  class="flex-auto w-80  h-10"></div>
-                      </div>
+                      </div> -->
                   </div>
                 
                   <div>
-                      <label for="Qty" class="  block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Qty</label>
+                      <label for="Qty" class="  block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Qty Saat Ini</label>
+                      <input type="number" id="Qty" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="<%=result.quantity%>" disabled>
+                  </div>
+                  <div>
+                      <label for="Qty" class="  block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Qty Keluar</label>
                       <input type="number" id="Qty" name="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required>
                   </div>
                   <div class="flex mt-6 text-sm">

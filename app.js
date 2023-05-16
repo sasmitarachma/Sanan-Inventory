@@ -322,13 +322,16 @@ app.post("/scan-keluar", async (req,res)=>{
 
     // JSON Validator
     const schema = {type:"object",properties:{
-        id:{type:"string"},
+        
+        id_barang:{type:"string"},
+        id_gudang:{type:"string"},
         nama_barang:{type:"string"},
         kategori:{type:"string"},
         harga:{type:"string"},
-        tanggal_produksi:{type:"string"}
+        tanggal_produksi:{type:"string"},
+        tanggal_expired:{type:"string"}
         },
-        required: ["id", "nama_barang", "kategori", "harga","tanggal_produksi"],
+        required: ["id_barang","id_gudang", "nama_barang", "kategori", "harga","tanggal_produksi"],
         additionalProperties: false
     }
     const validate = ajv.compile(schema)
@@ -339,8 +342,8 @@ app.post("/scan-keluar", async (req,res)=>{
         console.log(validate.errors)
     }
     else{
-        res.json(toJson)
-        let string = encodeURIComponent(toJson.id);
+        // res.json(toJson) 
+        let string = encodeURIComponent(toJson.id_gudang);
         res.redirect('/barang-keluar/?id=' + string);
     }
 
@@ -354,17 +357,19 @@ app.get("/barang-keluar", async (req,res)=>{
     // Query Barang, Tampilkan informasi barang 
 
     // Render Halaman 
+    // console.log(req.query.id)
     let result = await getBarangScan(req.query.id)
+    console.log(result)
     res.render("barang-keluar",{result})
 })
 app.post("/barang-keluar", async (req,res)=>{
 
     // Terima req.body dan kirim db
 
-    const {idBarang,quantity,tglKeluar,tglExpired}= req.body
-    console.log(tglExpired)
+    const {idGudang,quantity}= req.body
+    // console.log(tglExpired)
     try{
-       let status = await outGudang(idBarang,quantity,tglExpired,tglKeluar)
+       let status = await outGudang(idGudang,quantity)
        console.log(status)
        if(status){
         res.redirect("/stok-keluar")

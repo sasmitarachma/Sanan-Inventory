@@ -49,7 +49,7 @@ export async function getBarangKeluarDate(){
 
 // Scan QR Get Barang
 export async function getBarangScan(idBarang){
-    const [returnGetBarang]= await pool.query("SELECT * FROM tb_barang where id = ?",[idBarang])
+    const [returnGetBarang]= await pool.query("SELECT *, tb_barang.id as id_barang, tb_gudang.id as id_gudang FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where tb_gudang.id = ?",[idBarang])
     console.log(returnGetBarang[0])
     return returnGetBarang[0]
     
@@ -123,19 +123,19 @@ export async function updatePathBarangMasuk(idGudang,pathQR){
 
 
 // Query Barang Keluar
-export async function outGudang(idBarang,qty,tglExpired,tglKeluar){
+export async function outGudang(idGudang,qty){
     let status = false;
     // Get ID Barang Gudang
-        const [returnGetItem]= await pool.query("SELECT * FROM tb_gudang where tanggal_expired = ? AND id_barang = ?",[tglExpired,idBarang])
+        const [returnGetItem]= await pool.query("SELECT * FROM tb_gudang where id = ?",[idGudang])
         if(returnGetItem[0].quantity > 0 && returnGetItem[0].quantity>= qty){
 
         // Update Barang Gudang
-        const [returnUpdateGudang]= await pool.query("UPDATE tb_gudang SET quantity = quantity - ? where tanggal_expired = ? AND id_barang = ?",[qty,tglExpired,idBarang])
+        const [returnUpdateGudang]= await pool.query("UPDATE tb_gudang SET quantity = quantity - ? where id = ?",[qty,idGudang])
 
 
         // Insert Barang Keluar
 
-        const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal_keluar, id_barang) VALUES (?, ?, ?, ?)",[returnGetItem[0].id , qty, tglKeluar, idBarang])
+        const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal_keluar, id_barang) VALUES (?, ?, ?, ?)",[returnGetItem[0].id , qty, getDateNow(), returnGetItem[0].id_barang])
 
         // == Date Generated ==
         // const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal, id_barang) VALUES (?, ?, ?, ?)",[returnGetItem[0].id , qty, getDateNow(), idBarang])
