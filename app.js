@@ -9,7 +9,11 @@ import fs from "fs"
 
 // Express File Upload
 import fileUpload from "express-fileupload";
+// EJS
+import ejs from "ejs"
 
+// html pdf
+import pdf from "html-pdf"
 // Path Node
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -409,6 +413,61 @@ app.get("/produk-expired", async (req,res)=>{
     res.render("produk-expired",{results})
 })
 
+// PDF reader
+
+// let students = [
+//     {name: "Joy",
+//      email: "joy@example.com",
+//      city: "New York",
+//      country: "USA"},
+//     {name: "John",
+//      email: "John@example.com",
+//      city: "San Francisco",
+//      country: "USA"},
+//     {name: "Clark",
+//      email: "Clark@example.com",
+//      city: "Seattle",
+//      country: "USA"},
+//     {name: "Watson",
+//      email: "Watson@example.com",
+//      city: "Boston",
+//      country: "USA"},
+//     {name: "Tony",
+//      email: "Tony@example.com",
+//      city: "Los Angels",
+//      country: "USA"
+//  }];
+
+
+app.get("/generateReport", (req, res) => {
+    let address =`gudang-qr-img/54.png`
+    // let address ="testing"
+    // res.render("report-template",{address})
+        ejs.renderFile(path.join(__dirname, './views/', "report-template.ejs"), {address}, (err, data) => {
+        if (err) {
+            res.send(err);
+        } else {
+            let options = {
+                "height": "11.25in",
+                "width": "8.5in",
+                "header": {
+                    "height": "20mm"
+                },
+                "footer": {
+                    "height": "20mm",
+                },
+                // "base": `file:///home/www/${__dirname}/public/gudang-qr-img/`
+            };
+            pdf.create(data, options).toFile("report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send("File created successfully");
+                }
+            });
+        }
+    });
+})
 
 // ==== DEWA SAMPAI SINI ====
 
