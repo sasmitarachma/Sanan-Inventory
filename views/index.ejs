@@ -390,13 +390,14 @@
                   <th class="px-4 py-3">Tanggal Produksi</th>
                   <th class="px-4 py-3">Tanggal Expired</th>
                   <th class="px-4 py-3">QR Barang Gudang</th>
+                  <th class="px-4 py-3"></th>
                   <!--<th class="px-4 py-3">Actions</th> -->
                 </tr>
               </thead>
               <tbody
               class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
             >
-            <% var nomor = 1 %>
+            <% let nomor = 1 %>
             <% datas.forEach((data)=> { %>
               <tr class="text-gray-700 dark:text-gray-400">
                 <td class="px-4 py-3">
@@ -435,6 +436,15 @@
                   <img src="<%= data.gudang_qrcode %>" alt="" >
                   <!-- <%= data.tanggal_expired %> -->
                   <!-- <%= data.qrcode_img %> -->
+                </td>
+                <td class="px-4 py-3 text-sm">
+                  <button type="submit"
+                    class="mb-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-sage border border-transparent rounded-lg active:bg-green hover:bg-green focus:outline-none focus:shadow-outline-purple"
+                  >
+                      <a href="/generateReport/?id=<%=data.id_gudang%>&qty=<%=data.quantity%>">Cetak QR Barang 
+                      </a>
+
+                  </button>
                 </td>
                 <!--<td class="px-4 py-3">
                   <div class="flex items-center space-x-4 text-sm">

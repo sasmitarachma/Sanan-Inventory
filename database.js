@@ -295,7 +295,7 @@ export async function getTampilGudangID(idBarangMasuk){
 
 //tampil gudang
 export async function getTampilGudang(){
-    const [rows] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id ASC")
+    const [rows] = await pool.query("SELECT *, tb_gudang.id as id_gudang FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id ORDER BY tb_gudang.id ASC")
     return rows
 }
 //tampil barang keluar

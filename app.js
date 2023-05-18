@@ -418,30 +418,9 @@ app.get("/produk-expired", async (req, res) => {
 
 // PDF reader
 
-// let students = [
-//     {name: "Joy",
-//      email: "joy@example.com",
-//      city: "New York",
-//      country: "USA"},
-//     {name: "John",
-//      email: "John@example.com",
-//      city: "San Francisco",
-//      country: "USA"},
-//     {name: "Clark",
-//      email: "Clark@example.com",
-//      city: "Seattle",
-//      country: "USA"},
-//     {name: "Watson",
-//      email: "Watson@example.com",
-//      city: "Boston",
-//      country: "USA"},
-//     {name: "Tony",
-//      email: "Tony@example.com",
-//      city: "Los Angels",
-//      country: "USA"
-//  }];
 
 app.get("/generateReport/", (req, res) => {
+  
   let id = req.query.id;
   let quantity = req.query.qty;
   console.log(quantity)
@@ -466,11 +445,13 @@ app.get("/generateReport/", (req, res) => {
           },
           // "base": `file:///home/www/${__dirname}/public/gudang-qr-img/`
         };
-        pdf.create(data, options).toFile("report.pdf", function (err, data) {
+        const fileName = `cetakQRgudang${id}.pdf`
+        pdf.create(data, options).toFile(__dirname+"/public/qr-pdf/"+fileName, function (err, data) {
           if (err) {
             res.send(err);
           } else {
-            res.send("File created successfully");
+            // res.redirect("/")
+            res.download(path.resolve(`./public/qr-pdf/${fileName}`))
           }
         });
       }
