@@ -214,7 +214,7 @@ export async function deleteBarangKeluar(idBarangKeluar){
 
 export async function getExpired(){
     const date = new Date();
-    date.setMonth(date.getMonth()+4)
+    date.setMonth(date.getMonth()+2)
     // SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id;
     const [result] = await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang=tb_barang.id where MONTH(tanggal_expired) <= ? ORDER BY tanggal_expired ASC",[date.getMonth()])
     const newDate = new Date(result.tanggal_expired)
