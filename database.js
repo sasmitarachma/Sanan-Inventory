@@ -164,6 +164,17 @@ export async function deleteGudangAll(idGudang){
 }
 // deleteGudangAll(12)
 
+//Delete Barang
+export async function deleteBarang(idBarang){
+    await pool.query("DELETE FROM tb_barang_masuk WHERE id_gudang = ?",[idBarang])
+    await pool.query("DELETE FROM tb_barang_keluar WHERE id_gudang = ?",[idBarang])
+    await pool.query("DELETE FROM tb_gudang WHERE id = ?",[idBarang])
+
+    await pool.query("SET foreign_key_checks = 0;")
+    const [result]=await pool.query("DELETE FROM tb_barang WHERE id = ?",[idBarang])
+    console.log(result)
+    await pool.query("SET foreign_key_checks = 1;")
+}
 
 // Delete Barang Masuk V2
 export async function deleteBarangMasuk(idBarangMasuk){

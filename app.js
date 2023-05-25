@@ -45,6 +45,8 @@ import {
   createBarangBaru,
   deleteBarangKeluar,
   deleteBarangMasuk,
+  deleteGudangAll,
+  deleteBarang,
   getAllBarang,
   getBarangKeluarDate,
   getBarangMasuk,
@@ -188,6 +190,20 @@ app.get("/produk", async (req, res) => {
   // res.send(datas)
   res.render("produk", { datas });
 });
+
+// Delete barang
+app.post("/delete-barang", async (req, res) => {
+  const idBarang = req.body.idBarang;
+  //console.log(req.body.idBarang)
+  //res.send(req.body.idBarang)
+  try {
+    await deleteBarang(idBarang);
+    res.redirect("/produk");
+  } catch (e) {
+    res.send(e);
+  }
+});
+
 
 // Scan Barang
 app.get("/scan", async (req, res) => {
