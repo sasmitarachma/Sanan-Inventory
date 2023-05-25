@@ -4,10 +4,11 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const pool = mysql.createPool({
-    host:process.env.HOST,
-    user:process.env.USER,
-    password:process.env.PASSWORD,
-    database:process.env.DB
+    host:process.env.MYSQL_HOST,
+    user:process.env.MYSQL_USER,
+    password:process.env.MYSQL_PASSWORD,
+    database:process.env.MYSQL_DATABASE,
+    port:process.env.MYSQL_PORT
 }).promise()
 
 
@@ -315,8 +316,8 @@ export async function getTampilBarangKeluar(){
     return rows
 }
 //tampil laporan
-export async function getTampilLaporan(tanggal_produksi, tanggal_produksi2){
-    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? OR tb_gudang.tanggal_produksi <= ?", [tanggal_produksi, tanggal_produksi2])
+export async function getTampilLaporan(tanggal_produksi, tanggal_expired){
+    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? OR tb_gudang.tanggal_produksi <= ?", [tanggal_produksi, tanggal_expired])
     console.log(tanggal)
     return tanggal
 }
