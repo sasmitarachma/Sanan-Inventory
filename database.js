@@ -3,12 +3,17 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+// const pool = mysql.createPool({
+//     host:process.env.HOST,
+//     user:process.env.USER,
+//     password:process.env.PASSWORD,
+//     database:process.env.DB
+// }).promise()
 const pool = mysql.createPool({
-    host:process.env.MYSQL_HOST,
-    user:process.env.MYSQL_USER,
-    password:process.env.MYSQL_PASSWORD,
-    database:process.env.MYSQL_DATABASE,
-    port:process.env.MYSQL_PORT
+    host:process.env.HOST,
+    user:process.env.USER,
+    password:process.env.PASSWORD,
+    database:process.env.DB
 }).promise()
 
 
@@ -33,6 +38,13 @@ export async function createBarangBaru(namaBarang,kategori,harga,barangImg,qrCod
 export async function updatePathBarang(idBarang,pathQR,pathImg){
     const [returnPath] = await pool.query("UPDATE tb_barang SET qrcode_img = ?, barang_img = ? where id = ?",[pathQR,pathImg,idBarang])
     console.log(returnPath)
+}
+
+// LOGIN
+export async function getUser(username){
+    const[returnLogin]= await pool.query("SELECT * FROM tb_users where username = ?",[username])
+    console.log(returnLogin[0])
+    return returnLogin[0]
 }
 
    

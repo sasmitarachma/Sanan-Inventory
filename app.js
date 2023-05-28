@@ -14,6 +14,15 @@ import ejs from "ejs";
 
 // html pdf
 import pdf from "html-pdf";
+
+
+// Cookie Parser
+
+import cookieParser from "cookie-parser";
+
+// JWT DECODE
+import jwtDecode from "jwt-decode";
+
 // Path Node
 import path from "path";
 import { fileURLToPath } from "url";
@@ -32,6 +41,9 @@ app.set("view engine", "ejs");
 
 // Allow URL Encoded
 app.use(express.urlencoded({ extended: true }));
+
+// Use Cookie Parser 
+app.use(cookieParser())
 
 // Static Files for Images
 app.use(express.static("public"));
@@ -58,6 +70,7 @@ import {
   outGudang,
   updatePathBarang,
   updatePathBarangMasuk,
+  getUser,
 } from "./database.js";
 
 //faat
@@ -75,16 +88,80 @@ import {
   updateGudang,
 } from "./database.js";
 
+// Import JWT
+import jwt from 'jsonwebtoken'
+
 //
-app.get("/testing", async (req, res) => {
-  let nama = "Dewa";
-  res.render("testing", { nama });
-});
+// app.get("/testing", async (req, res) => {
+//   let nama = "Dewa";
+//   res.render("testing", { nama });
+// });
+
+// == MIDDLEWARE LOGIN
+
+app.use((req,res,next)=>{
+  const token = req.cookies.token
+  // console.log(token)
+  if (req.originalUrl === '/login') {
+    return next();
+  }
+    try {
+        const user =jwt.verify(token, process.env.SECRET)
+        req.user = user    
+        next()
+    } catch (error) {
+        res.clearCookie("token")
+        return res.redirect("/login")
+    }
+})
+
+// Middleware Check admin
+const checkAdmin = (req,res,next)=>{
+  const token = req.cookies.token
+  const user = jwtDecode(token)
+  console.log(user)
+  if(user.role!="admin"){
+    return res.redirect("/dashboard")
+  }
+  next()
+}
+
+// == Login 
+
+app.get("/login", async (req,res)=>{
+  res.render("login")
+})
+
+app.post("/login", async (req, res) => {
+  const {username, password}= req.body
+  const user = await getUser(username)
+  if(password != user.password){
+    return res.status(404).json({
+      error: "invalid login"
+    }) 
+  }
+  delete user.password
+  const token = jwt.sign(user,process.env.SECRET, {expiresIn:"1h"})
+  res.cookie("token",token,{
+    httpOnly:true
+  })
+  return res.redirect("/dashboard")
+
+})
+
+// Add karyawan admin only
+
+app.get("/add-karyawan", checkAdmin, async (req,res)=>{
+  res.send("this is add karyawan")
+})
+
 
 // Reroute Home
 app.get("/", async (req, res) => {
   res.redirect("/dashboard");
 });
+
+
 
 // Dashboard
 app.get("/dashboard", async (req, res) => {
@@ -474,6 +551,8 @@ app.get("/generateReport/", (req, res) => {
     }
   );
 });
+
+
 
 // ==== DEWA SAMPAI SINI ====
 
