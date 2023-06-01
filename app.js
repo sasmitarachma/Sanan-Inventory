@@ -175,11 +175,11 @@ app.get("/data", async (req, res) => {
 });
 
 // Buat Barang Baru
-app.get("/tambah-produk", async (req, res) => {
+app.get("/tambah-produk", checkAdmin, async (req, res) => {
   res.render("tambah-produk");
 });
 
-app.post("/tambah-produk", async (req, res) => {
+app.post("/tambah-produk", checkAdmin, async (req, res) => {
   const { namaBarang, kategori, harga } = req.body;
   const { barangImg } = req.files;
 
@@ -322,16 +322,23 @@ app.post("/scan", async (req, res) => {
 
 // Tampil Stok Masuk
 app.get("/stok-masuk", async (req, res) => {
+
+  
+
   let datas = await getTampilBarangMasuk();
   res.render("stok-masuk", { datas });
 });
 
 // Scan Masuk
 app.get("/scan-masuk", async (req, res) => {
+  
+  
   res.render("scan-masuk.ejs");
 });
 
 app.post("/scan-masuk", async (req, res) => {
+
+
   let finalData = JSON.stringify(req.body.qrValue);
   finalData = finalData.replace(/\\/g, "");
 
@@ -382,9 +389,10 @@ app.get("/barang-masuk", async (req, res) => {
 
 app.post("/barang-masuk", async (req, res) => {
   const { idBarang, quantity } = req.body;
+  let cookie = jwtDecode(req.cookies.token) 
 
   // console.log(idBarang)
-  let idGudang = await insertGudang(idBarang, quantity);
+  let idGudang = await insertGudang(idBarang, quantity, cookie.user_id);
 
   const [barang] = await getTampilGudangID(idGudang);
   // console.log("barang=" + barang)
@@ -472,12 +480,13 @@ app.get("/barang-keluar", async (req, res) => {
   res.render("barang-keluar", { result });
 });
 app.post("/barang-keluar", async (req, res) => {
+  let cookie = jwtDecode(req.cookies.token) 
   // Terima req.body dan kirim db
 
   const { idGudang, quantity } = req.body;
   // console.log(tglExpired)
   try {
-    let status = await outGudang(idGudang, quantity);
+    let status = await outGudang(idGudang, quantity,cookie.user_id);
     console.log(status);
     if (status) {
       res.redirect("/stok-keluar");
@@ -585,7 +594,7 @@ app.get("/generateReport/", (req, res) => {
 // })
 
 //tampil laporan
-app.get("/laporan", async (req, res) => {
+app.get("/laporan", checkAdmin, async (req, res) => {
   const tampilGudang = await getTampilGudang();
 
   let quantity = tampilGudang.map(function (item) {
@@ -609,7 +618,7 @@ app.get("/laporan", async (req, res) => {
   });
 });
 
-app.post("/laporan-detail", async (req, res) => {
+app.post("/laporan-detail", checkAdmin, async (req, res) => {
   const tanggal_produksi = req.body.tanggal_produksi;
   const tanggal_expired = req.body.tanggal_expired;
   const tampilLaporan = await getTampilLaporan(

@@ -82,7 +82,7 @@ export async function getBarangMasukID(idBarangMasuk){
 }
 
 // Query Barang Masuk
-export async function insertGudang(idBarang,qty){
+export async function insertGudang(idBarang,qty,id_user){
 
     //  IF DUNNO TANGGAL PRODUKSI, GENERATE TANGGAL PRODUKSI - TANGGAL EXPIRED
     // Tanggal produksi form bisa diganti menjadi tanggal expired
@@ -110,7 +110,7 @@ export async function insertGudang(idBarang,qty){
     // console.log(returnInsertGudang)
 
     // Insert to tb_barang_masuk
-    const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnInsertGudang.insertId,qty,getDateNow(),idBarang])
+    const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang, id_user) VALUES (?, ?, ?, ?, ?)",[returnInsertGudang.insertId,qty,getDateNow(),idBarang, id_user])
 
     // const [returnInsertMasuk]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk) VALUES (?, ?, ?, ?)",[returnInsertGudang.insertId,qty,getDateNow(), idBarang])
     let {insertId} =returnInsertGudang
@@ -119,9 +119,9 @@ export async function insertGudang(idBarang,qty){
     
     }
     else{
-        const [returnGetGudangDate]= await pool.query("SELECT * FROM tb_gudang where tanggal_expired = ? AND id_barang = ?",[tglExpired,idBarang])
+        const [returnGetGudangDate]= await pool.query("SELECT * FROM tb_gudang where tanggal_expired = ? AND id_barang = ? AND id_user = ?",[tglExpired,idBarang, id_user])
 
-        const [returnInsertMasukDate]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?)",[returnGetGudangDate[0].id,qty,getDateNow(), idBarang])
+        const [returnInsertMasukDate]= await pool.query("INSERT INTO tb_barang_masuk (id_gudang, quantity, tanggal_masuk,id_barang) VALUES (?, ?, ?, ?, ?)",[returnGetGudangDate[0].id,qty,getDateNow(), idBarang, id_user])
         console.log("no update !")
         return -1
         // console.log(returnInsertMasukDate)
@@ -136,7 +136,7 @@ export async function updatePathBarangMasuk(idGudang,pathQR){
 
 
 // Query Barang Keluar
-export async function outGudang(idGudang,qty){
+export async function outGudang(idGudang,qty, id_user){
     let status = false;
     // Get ID Barang Gudang
         const [returnGetItem]= await pool.query("SELECT * FROM tb_gudang where id = ?",[idGudang])
@@ -148,7 +148,7 @@ export async function outGudang(idGudang,qty){
 
         // Insert Barang Keluar
 
-        const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal_keluar, id_barang) VALUES (?, ?, ?, ?)",[returnGetItem[0].id , qty, getDateNow(), returnGetItem[0].id_barang])
+        const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal_keluar, id_barang, id_user) VALUES (?, ?, ?, ?, ?)",[returnGetItem[0].id , qty, getDateNow(), returnGetItem[0].id_barang, id_user])
 
         // == Date Generated ==
         // const [returnBarangKeluar]= await pool.query("INSERT INTO tb_barang_keluar (id_gudang, quantity, tanggal, id_barang) VALUES (?, ?, ?, ?)",[returnGetItem[0].id , qty, getDateNow(), idBarang])

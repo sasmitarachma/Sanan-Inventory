@@ -242,9 +242,9 @@
                   </div>
                 <form action="/laporan-detail" method="post">
                     <div class="flex flex-nowrap pb-8">
-                        <div class="basis-1/2"><input type="date" name="tanggal_produksi" class="flex-auto w-80" required></div>
+                        <div  class="basis-1/2"><input id="dateMin" type="date" name="tanggal_produksi" class="flex-auto w-80" required></div>
                         <div class="basis-1/2"><p class="text-center">s/d</p></div>
-                        <div class="basis-1/2"><input type="date" name="tanggal_expired" class="flex-auto w-80" required></div>
+                        <div class="basis-1/2"><input id="dateMax" type="date" name="tanggal_expired" class="flex-auto w-80" required></div>
                     </div>
                     <div>
                         <button
@@ -261,6 +261,21 @@
         </div>
       </div>
       <script>
+
+        
+        const dateMin = document.getElementById("dateMin")
+        const dateMax = document.getElementById("dateMax")
+        // let dateMinVal=''
+        dateMin.onchange = ()=>{
+          // dateMinVal = 
+          dateMax.min = dateMin.value
+        }
+
+
+        
+
+
+
          const bar = document.getElementById("barChart");
         let labelsPie = <%- JSON.stringify(nama_barang) %>;
         let dataPie = <%- JSON.stringify(quantity) %>;
