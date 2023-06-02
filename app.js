@@ -126,7 +126,7 @@ const checkAdmin = (req,res,next)=>{
   next()
 }
 
-// == Login 
+// == Login ==
 
 app.get("/login", async (req,res)=>{
   res.render("login")
@@ -147,6 +147,13 @@ app.post("/login", async (req, res) => {
   })
   return res.redirect("/dashboard")
 
+})
+
+// == Logout ==
+
+app.get("/logout", async (req,res)=>{
+  res.clearCookie("token")
+  res.redirect("/")
 })
 
 // Add karyawan admin only
