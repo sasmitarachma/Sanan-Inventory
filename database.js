@@ -27,8 +27,8 @@ export async function getAllBarang(){
 
 
 // Query Masukkan Barang Baru
-export async function createBarangBaru(namaBarang,kategori,harga,barangImg,qrCodeImg){
-    const [returnBarangMasuk] = await pool.query("INSERT INTO tb_barang (nama_barang,kategori,harga,barang_img,qrcode_img) VALUES (?,?,?,?,?)",[namaBarang,kategori,harga,barangImg,qrCodeImg])
+export async function createBarangBaru(namaBarang,kategori,barangImg,qrCodeImg){
+    const [returnBarangMasuk] = await pool.query("INSERT INTO tb_barang (nama_barang,kategori,barang_img,qrcode_img) VALUES (?,?,?,?)",[namaBarang,kategori,barangImg,qrCodeImg])
     console.log(returnBarangMasuk)
     return returnBarangMasuk
 
@@ -47,7 +47,13 @@ export async function getUser(username){
     return returnLogin[0]
 }
 
-   
+//Add Karyawan
+export async function createAddKaryawan(Username,jenisKelamin,Alamat,noTelp,Password,Status){
+    const [returnTambahKaryawan] = await pool.query("INSERT INTO tb_users (username,jenis_kelamin,alamat,no_telp,password,role) VALUES (?,?,?,?,?,?)",[Username,jenisKelamin,Alamat,noTelp,Password,Status])
+    console.log(returnTambahKaryawan)
+    return returnTambahKaryawan
+
+}
 
 // createBarangBaru("asd","asd",1000,"/asd","/asd")
 
@@ -168,6 +174,7 @@ export async function deleteOnlyGudang(idGudang){
     await pool.query("SET foreign_key_checks = 1;")
 }
 
+
 // Delete Gudang dan Sekitarnya
 export async function deleteGudangAll(idGudang){
     await pool.query("DELETE FROM tb_barang_masuk WHERE id_gudang = ?",[idGudang])
@@ -176,6 +183,14 @@ export async function deleteGudangAll(idGudang){
     console.log(result)
 }
 // deleteGudangAll(12)
+
+// Delete Hanya Karyawan
+export async function deleteKaryawan(iduser){
+    await pool.query("SET foreign_key_checks = 0;")
+    const [result] = await pool.query("DELETE FROM tb_users WHERE user_id = ?",[iduser])
+    console.log(result)
+    await pool.query("SET foreign_key_checks = 1;")
+}
 
 //Delete Barang
 export async function deleteBarang(idBarang){
@@ -306,6 +321,12 @@ export async function getTampilBarang(){
     return rows
 }
 
+//tampil karyawan
+export async function getTampilKaryawan(){
+    const [rows] = await pool.query("SELECT * FROM tb_users")
+    return rows
+}
+
 //tampil barang masuk
 export async function getTampilBarangMasuk(){
     const [rows] = await pool.query("SELECT tb_barang_masuk.id, tb_barang_masuk.id_barang, tb_barang.nama_barang, tb_barang_masuk.id_gudang, tb_barang_masuk.quantity, tb_barang_masuk.tanggal_masuk FROM tb_barang_masuk INNER JOIN tb_barang ON tb_barang_masuk.id_barang=tb_barang.id order by tb_barang_masuk.id DESC")
@@ -345,8 +366,21 @@ export async function getBarangID(idBarang){
     return rows[0]
 }
 
-export async function updateBarang(idBarang, namaBarang, kategoriBarang, hargaBarang,gambarBarang){
-    const [updatedBarang]= await pool.query("UPDATE tb_barang SET nama_barang = ?, kategori = ?, harga = ? where id = ?",[namaBarang, kategoriBarang, hargaBarang, idBarang])
+export async function updateBarang(idBarang, namaBarang, kategoriBarang ,gambarBarang){
+    const [updatedBarang]= await pool.query("UPDATE tb_barang SET nama_barang = ?, kategori = ? where id = ?",[namaBarang, kategoriBarang, idBarang])
+    return(updatedBarang)
+    
+}
+
+//update barang
+export async function getKaryawanID(idKaryawan){
+    const [rows]= await pool.query("SELECT * FROM tb_users where  user_id = ?",[idKaryawan])
+    console.log(rows[0])
+    return rows[0]
+}
+
+export async function updateKaryawan(idKaryawan, Username ,Alamat, noTelp, Password, Status){
+    const [updatedBarang]= await pool.query("UPDATE tb_users SET username = ?, alamat = ?, no_telp = ?, password = ?, role = ? where user_id = ?",[Username, Alamat, noTelp, Password, Status, idKaryawan])
     return(updatedBarang)
     
 }

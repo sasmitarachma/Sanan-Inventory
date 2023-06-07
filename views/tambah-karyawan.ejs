@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanan Inventory | Tambah Karyawan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config ={
+        theme: {
+          extend: {
+            colors:{
+              green: '#3C6255',
+              sage: '#617F75',
+              white: '#F5F5F5',
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      class="flex h-screen bg-gray-50 dark:bg-gray-900"
+      :class="{ 'overflow-hidden': isSideMenuOpen }"
+    >
+      <!-- Desktop sidebar -->
+      <aside
+      class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0"
+    >
+      <%- include('./partials/sidebar'); %>
+    </aside>
+      <!-- Mobile sidebar -->
+      <!-- Backdrop -->
+      <div class="flex flex-col flex-1 w-full">
+        <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+          <div
+            class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300"
+          >
+            <ul class="flex items-center flex-shrink-0 space-x-6">
+            </ul>
+          </div>
+        </header>
+        <main class="h-full pb-16 overflow-y-auto">
+            <div class="container px-6 mx-auto grid">
+              <h2
+                class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+              >
+                Karyawan | Tambah Karyawan Baru
+            </h2>
+              <!-- General elements -->
+              <form action="/tambah-karyawan" method="post" enctype="multipart/form-data">
+                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+               
+                  <div>
+                    <label for="nama_karyawan" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Nama</label>
+                    <input type="text" id="nama_karyawan" name="Username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                   </div>
+                  
+                   <div class="mt-4 text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">
+                      Jenis Kelamin
+                    </span>
+                    <div class="mt-2">
+                        <label
+                        class="inline-flex items-center text-gray-600 dark:text-gray-400"
+                      >
+                        <input
+                          type="radio"
+                          class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                          name="jenisKelamin"
+                          value="Laki-laki" checked
+                        />
+                        <span class="ml-2">Laki-laki</span>
+                      </label>
+                      <label
+                        class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400"
+                      >
+                        <input
+                          type="radio"
+                          class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                          name="jenisKelamin"
+                          value="Perempuan"
+                        />
+                        <span class="ml-2">Perempuan</span>
+                      </label>
+                    </div>
+                  </div>
+                   
+                  <div>
+                    <label for="alamat_karyawan" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Alamat</label>
+                    <input type="text" id="alamat_karyawan" name="Alamat" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  </div>
+                  
+                  <div>
+                    <label for="notelp_karyawan" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Nomor Telepon</label>
+                    <input type="text" id="notelp_karyawan" name="noTelp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required>
+                  </div>
+                  
+                  <div>
+                    <label for="password_karyawan" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Password</label>
+                    <input type="text" id="password_karyawan" name="Password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  </div>
+
+
+                  <div>
+                    <label for="status" class="block mb-2 text-sm font-regular text-gray-900 dark:text-gray-400">Pilih Status Karyawan</label>
+                    <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      <option value="admin">admin</option>
+                      <option value="karyawan">karyawan</option>
+                    </select>
+                  </div>
+    
+                  <div class="flex mt-6 text-sm">
+                    <div>
+                      <button type="submit"
+                        class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-sage border border-transparent rounded-lg active:bg-green hover:bg-green focus:outline-none focus:shadow-outline-purple"
+                      >
+                        Tambah Karyawan
+                      </button>
+                    </div>
+                  </div>
+                </div>
+               </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -71,6 +71,11 @@ import {
   updatePathBarang,
   updatePathBarangMasuk,
   getUser,
+  createAddKaryawan,
+  getTampilKaryawan,
+  deleteKaryawan,
+  updateKaryawan,
+  getKaryawanID,
 } from "./database.js";
 
 //faat
@@ -136,9 +141,7 @@ app.post("/login", async (req, res) => {
   const {username, password}= req.body
   const user = await getUser(username)
   if(password != user.password){
-    return res.status(404).json({
-      error: "invalid login"
-    }) 
+    return res.redirect("/login")
   }
   delete user.password
   const token = jwt.sign(user,process.env.SECRET, {expiresIn:"1h"})
@@ -158,9 +161,34 @@ app.get("/logout", async (req,res)=>{
 
 // Add karyawan admin only
 
-app.get("/add-karyawan", checkAdmin, async (req,res)=>{
-  res.send("this is add karyawan")
-})
+app.get("/tambah-karyawan", checkAdmin, async (req,res)=>{
+  res.render("tambah-karyawan");
+});
+
+app.post("/tambah-karyawan", checkAdmin, async (req, res) => {
+  const { Username,jenisKelamin,Alamat,noTelp,Password,Status} = req.body;
+
+  let karyawan = await createAddKaryawan (Username, jenisKelamin, Alamat, noTelp,  Password, Status, null)
+
+  // console.log(karyawan)
+  let content = `{"id":"${karyawan.insertId}","username":"${Username}","jenis_kelamin":"${jenisKelamin}", "alamat":"${Alamat}","no_telp":"${noTelp}","password":"${Password},"status":"${Status}"}`;
+  if (content.length === 0) res.send("Empty Data!");
+
+  res.redirect("/karyawan");
+});
+
+// Delete karyawan
+app.post("/delete-karyawan", async (req, res) => {
+  const iduser = req.body.iduser;
+  //console.log(iduser)
+  //res.send(req.body.iduser)
+  try {
+    await deleteKaryawan(iduser);
+    res.redirect("/karyawan");
+  } catch (e) {
+    res.send(e);
+  }
+});
 
 
 // Reroute Home
@@ -187,10 +215,10 @@ app.get("/tambah-produk", checkAdmin, async (req, res) => {
 });
 
 app.post("/tambah-produk", checkAdmin, async (req, res) => {
-  const { namaBarang, kategori, harga } = req.body;
+  const { namaBarang, kategori } = req.body;
   const { barangImg } = req.files;
 
-  let barang = await createBarangBaru(namaBarang, kategori, harga, null, null);
+  let barang = await createBarangBaru(namaBarang, kategori, null, null);
   if (!barangImg) return res.send("No Image !");
 
   barangImg.name = barang.insertId + ".png";
@@ -201,7 +229,7 @@ app.post("/tambah-produk", checkAdmin, async (req, res) => {
   barangImg.mv(__dirname + `/public/${barangPath}/`);
 
   // console.log(barang)
-  let content = `{"id":"${barang.insertId}","nama_barang":"${namaBarang}","kategori":"${kategori}","harga":"${harga}"}`;
+  let content = `{"id":"${barang.insertId}","nama_barang":"${namaBarang}","kategori":"${kategori}"}`;
   if (content.length === 0) res.send("Empty Data!");
 
   let qrPath = `qrcode-img/${barang.insertId}.png`;
@@ -308,10 +336,9 @@ app.post("/scan", async (req, res) => {
       id: { type: "string" },
       nama_barang: { type: "string" },
       kategori: { type: "string" },
-      harga: { type: "string" },
       tanggal_produksi: { type: "string" },
     },
-    required: ["id", "nama_barang", "kategori", "harga", "tanggal_produksi"],
+    required: ["id", "nama_barang", "kategori", "tanggal_produksi"],
     additionalProperties: false,
   };
   const validate = ajv.compile(schema);
@@ -358,9 +385,8 @@ app.post("/scan-masuk", async (req, res) => {
       id: { type: "string" },
       nama_barang: { type: "string" },
       kategori: { type: "string" },
-      harga: { type: "string" },
     },
-    required: ["id", "nama_barang", "kategori", "harga"],
+    required: ["id", "nama_barang", "kategori"],
     additionalProperties: false,
   };
   const validate = ajv.compile(schema);
@@ -404,7 +430,7 @@ app.post("/barang-masuk", async (req, res) => {
   const [barang] = await getTampilGudangID(idGudang);
   // console.log("barang=" + barang)
   if (idGudang > -1) {
-    let content = `{"id_barang":"${barang.id}","id_gudang":"${barang.id_gudang}","nama_barang":"${barang.nama_barang}","kategori":"${barang.kategori}","harga":"${barang.harga}","tanggal_produksi":"${barang.tanggal_produksi}","tanggal_expired":"${barang.tanggal_expired}"}`;
+    let content = `{"id_barang":"${barang.id}","id_gudang":"${barang.id_gudang}","nama_barang":"${barang.nama_barang}","kategori":"${barang.kategori}","tanggal_produksi":"${barang.tanggal_produksi}","tanggal_expired":"${barang.tanggal_expired}"}`;
     if (content.length === 0) res.send("Empty Data!");
 
     let qrPath = `gudang-qr-img/${idGudang}.png`;
@@ -446,7 +472,6 @@ app.post("/scan-keluar", async (req, res) => {
       id_gudang: { type: "string" },
       nama_barang: { type: "string" },
       kategori: { type: "string" },
-      harga: { type: "string" },
       tanggal_produksi: { type: "string" },
       tanggal_expired: { type: "string" },
     },
@@ -455,7 +480,6 @@ app.post("/scan-keluar", async (req, res) => {
       "id_gudang",
       "nama_barang",
       "kategori",
-      "harga",
       "tanggal_produksi",
     ],
     additionalProperties: false,
@@ -523,6 +547,13 @@ app.post("/delete-stok-keluar", async (req, res) => {
 app.get("/produk-expired", async (req, res) => {
   const results = await getExpired();
   res.render("produk-expired", { results });
+});
+
+// == Tampil Barang Karyawan ===
+
+app.get("/karyawan", checkAdmin, async (req, res) => {
+  const datas = await getTampilKaryawan();
+  res.render("karyawan", { datas });
 });
 
 // PDF reader
@@ -650,11 +681,31 @@ app.get("/update-barang/:idBarang", async (req, res) => {
 app.post("/update-barang/:idBarang", async (req, res) => {
   //request / 'post' to thunder client api with id
   const idBarang = req.params.idBarang;
-  const { nama_produk, kategori, harga } = req.body;
+  const { nama_produk, kategori } = req.body;
   console.log(nama_produk);
 
-  await updateBarang(idBarang, nama_produk, kategori, harga);
+  await updateBarang(idBarang, nama_produk, kategori );
   res.redirect(`/produk`);
+});
+
+//detail tampil karyawan by id -> form karyawan
+app.get("/update-karyawan/:idKaryawan", async (req, res) => {
+  //request / 'get'
+  const idKaryawan = req.params.idKaryawan;
+  const data = await getKaryawanID(idKaryawan);
+  console.log(data);
+  res.render("update-karyawan.ejs", { data });
+});
+
+//update karyawan
+app.post("/update-karyawan/:idKaryawan", async (req, res) => {
+  //request / 'post' to thunder client api with id
+  const idKaryawan = req.params.idKaryawan;
+  const { Username, Alamat, noTelp, Password, Status } = req.body;
+  console.log(Username);
+
+  await updateKaryawan(idKaryawan, Username, Alamat, noTelp, Password, Status );
+  res.redirect(`/karyawan`);
 });
 
 //detail tampil barang masuk by id -> form barang masuk
