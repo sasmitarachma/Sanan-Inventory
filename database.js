@@ -314,6 +314,19 @@ function generateProduction(tglExpired){
 // ==== DEWA SAMPAI SINI ====
 // ____ FAAT KE BAWAH ____
 
+//filter produk -produksi sendiri
+export async function filterKategoriSendiri(){
+    const [rows] = await pool.query("SELECT * FROM tb_barang WHERE kategori='produksi sendiri'")
+    return rows
+}
+
+//filter produk -sales
+export async function filterKategoriSales(){
+    const [rows] = await pool.query("SELECT * FROM tb_barang WHERE kategori='sales'")
+    return rows
+}
+
+
 // +++++ READ +++++
 //tampil barang
 export async function getTampilBarang(){

@@ -140,17 +140,28 @@ app.get("/login", async (req,res)=>{
 app.post("/login", async (req, res) => {
   const {username, password}= req.body
   const user = await getUser(username)
-  if(password != user.password){
-    return res.redirect("/login")
+  try {
+    if(password != user.password){
+      return res.redirect("/login")
+    }
+    delete user.password
+    const token = jwt.sign(user,process.env.SECRET, {expiresIn:"1h"})
+    res.cookie("token",token,{
+      httpOnly:false
+    })
+    res.redirect("/dashboard")
+    
+  } catch (error) {
+    res.redirect("/dashboard")
   }
-  delete user.password
-  const token = jwt.sign(user,process.env.SECRET, {expiresIn:"1h"})
-  res.cookie("token",token,{
-    httpOnly:true
-  })
-  return res.redirect("/dashboard")
-
 })
+
+// == 404 Page ==
+app.use((req, res, next) => {
+  res.render("error-page")
+})
+
+
 
 // == Logout ==
 
@@ -604,6 +615,25 @@ app.get("/generateReport/", (req, res) => {
 // ==== DEWA SAMPAI SINI ====
 
 // ____ FAAT KE BAWAH ____
+//faat
+import { 
+  filterKategoriSendiri, filterKategoriSales} from "./database.js";
+
+
+// Filter Produk -Produksi Sendiri
+app.get("/produk-kategori-sendiri",async (req,res)=>{
+  let datas = await filterKategoriSendiri()
+  // res.send(datas)
+  res.render("filter-kategori-sendiri",{datas})
+})
+
+// Filter Produk -Sales
+app.get("/produk-kategori-sales",async (req,res)=>{
+  let datas = await filterKategoriSales()
+  // res.send(datas)
+  res.render("filter-kategori-sales",{datas})
+})
+
 
 // +++++ READ +++++
 //tampil barang
