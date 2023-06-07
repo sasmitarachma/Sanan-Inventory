@@ -157,9 +157,9 @@ app.post("/login", async (req, res) => {
 })
 
 // == 404 Page ==
-app.use((req, res, next) => {
-  res.render("error-page")
-})
+//app.use((req, res, next) => {
+//  res.render("error-page")
+//})
 
 
 
@@ -469,6 +469,10 @@ app.get("/scan-keluar", async (req, res) => {
   res.render("scan-keluar.ejs");
 });
 
+app.get("/error-page", async (req, res) => {
+  res.render("error-page.ejs");
+});
+
 app.post("/scan-keluar", async (req, res) => {
   let finalData = JSON.stringify(req.body.qrValue);
   finalData = finalData.replace(/\\/g, "");
@@ -499,8 +503,7 @@ app.post("/scan-keluar", async (req, res) => {
 
   const valid = validate(toJson);
   if (!valid) {
-    res.send("QR Invalid !");
-    console.log(validate.errors);
+    res.redirect("/error-page");
   } else {
     // res.json(toJson)
     let string = encodeURIComponent(toJson.id_gudang);

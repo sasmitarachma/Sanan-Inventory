@@ -29,28 +29,6 @@
         <span class="ml-4">Dashboard</span>
       </a>
     </li>
-    <li id="karyawan" class="relative px-6 py-3">
-      <span
-        class="absolute inset-y-0 left-0 w-1 bg-green rounded-tr-lg rounded-br-lg hidden"
-        aria-hidden="true"
-      ></span>
-      <a
-        class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-        href="/karyawan"
-      >
-      <svg 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke-width="1.5" 
-        stroke="currentColor" 
-        class="w-6 h-6">
-
-        <path 
-        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-      </svg>
-        <span class="ml-4">Karyawan</span>
-      </a>
-    </li>
     <li id="produk" class="relative px-6 py-3">
       <span
         class="absolute inset-y-0 left-0 w-1 bg-green rounded-tr-lg rounded-br-lg hidden"
@@ -75,6 +53,28 @@
           ></path>
         </svg>
         <span class="ml-4">Produk</span>
+      </a>
+    </li>
+    <li id="karyawan" class="relative px-6 py-3">
+      <span
+        class="absolute inset-y-0 left-0 w-1 bg-green rounded-tr-lg rounded-br-lg hidden"
+        aria-hidden="true"
+      ></span>
+      <a
+        class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+        href="/karyawan"
+      >
+      <svg 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke-width="1.5" 
+        stroke="currentColor" 
+        class="w-6 h-6">
+
+        <path 
+        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+      </svg>
+        <span class="ml-4">Karyawan</span>
       </a>
     </li>
     <li id="stok-masuk" class="relative px-6 py-3">
@@ -207,7 +207,7 @@
 </div>
 <script>
   const nav = document.querySelectorAll(
-    "#dashboard,#produk,#stok-masuk,#stok-keluar,#produk-expired,#laporan",
+    "#dashboard,#produk,#karyawan,#stok-masuk,#stok-keluar,#produk-expired,#laporan",
     "#logout"
   );
   const { pathname } = window.location;

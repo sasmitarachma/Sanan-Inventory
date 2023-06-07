@@ -112,21 +112,20 @@
                         <th class="px-4 py-3">No</th>
                         <th class="px-4 py-3">Nama Produk</th>
                         <th class="px-4 py-3">Jenis Produksi</th>
-                        <th class="px-4 py-3">Harga</th>
                         <th class="px-4 py-3">Foto Produk</th>
-                        <th class="px-4 py-3">QR Code</th>
                         <th class="px-4 py-3">Actions</th>
                       </tr>
                     </thead>
                     <tbody
                     class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
                   >
+                  <% var nomor = 1 %>
                   <% datas.forEach((data)=> { %>
                     <tr class="text-gray-700 dark:text-gray-400">
                       <td class="px-4 py-3">
                         <div class="flex items-center text-sm">
                           <div>
-                            <p class="font-semibold"> <%= data.id %></p>
+                            <p class="font-semibold"> <%= nomor++ %></p>
                           </div>
                         </div>
                       </td>
@@ -141,15 +140,8 @@
                         </span>
                       </td>
                       <td class="px-4 py-3 text-sm">
-                        <%= data.harga %>
-                      </td>
-                      <td class="px-4 py-3 text-sm">
                         <!-- <img src="<%= data.barang_img %>" alt="" width="150em" height="150em"> -->
                         <img src="<%= data.barang_img %>" alt="" width="150em" height="150em">
-                      </td>
-                      <td class="px-4 py-3 text-sm">
-                        <img src="<%= data.qrcode_img %>" alt="" width="60%">
-                        <!-- <%= data.qrcode_img %> -->
                       </td>
                       <td class="px-4 py-3">
                         <div class="flex items-center space-x-4 text-sm">
@@ -161,7 +153,7 @@
                             <svg
                               class="w-5 h-5"
                               aria-hidden="true"
-                              fill="bg-green"
+                              fill="3C6255"
                               viewBox="0 0 20 20"
                             >
                               <path
@@ -170,14 +162,16 @@
                             </svg>
                             </a>
                           </button>
-                          <!--<button
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
-                            aria-label="Delete"
-                          >
+                          <form onsubmit="return confirm('!!PERHATIAN!!\nData produk ini akan dihapus.\nApakah anda yakin ingin menghapus data Ini ?');" action="/delete-barang" method="post" id="<%=data.id%>">
+                            <input type="text" value=" <%=data.id%>" name="idBarang" style="display:none">
+                              <button
+                                class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                aria-label="Delete" type="submit"
+                              >
                             <svg
                               class="w-5 h-5"
                               aria-hidden="true"
-                              fill="bg-green"
+                              fill="#3C6255"
                               viewBox="0 0 20 20"
                             >
                               <path
@@ -186,7 +180,8 @@
                                 clip-rule="evenodd"
                               ></path>
                             </svg>
-                          </button> -->
+                          </button> 
+                          </form>
                         </div>
                       </td>
                     </tr>
@@ -197,98 +192,6 @@
                 <div
                   class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800"
                 >
-                  <span class="flex items-center col-span-3">
-                    Showing 1-10 of 100
-                  </span>
-                  <span class="col-span-2"></span>
-                  <!-- Pagination -->
-                  <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-                    <nav aria-label="Table navigation">
-                      <ul class="inline-flex items-center">
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
-                            aria-label="Previous"
-                          >
-                            <svg
-                              class="w-4 h-4 fill-current"
-                              aria-hidden="true"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                clip-rule="evenodd"
-                                fill-rule="evenodd"
-                              ></path>
-                            </svg>
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                          class="px-3 py-1 text-white transition-colors duration-150 bg-green border border-r-0 border-green rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            1
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            2
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                          class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            3
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            4
-                          </button>
-                        </li>
-                        <li>
-                          <span class="px-3 py-1">...</span>
-                        </li>
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            8
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                          >
-                            9
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
-                            aria-label="Next"
-                          >
-                            <svg
-                              class="w-4 h-4 fill-current"
-                              aria-hidden="true"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                                fill-rule="evenodd"
-                              ></path>
-                            </svg>
-                          </button>
-                        </li>
-                      </ul>
-                    </nav>
-                  </span>
                 </div>
               </div>
             </div>
