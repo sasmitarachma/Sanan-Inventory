@@ -4,15 +4,94 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sanan Inventory | Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
   </head>
   <body>
-    <form action="/login" method="post">
+    <div class="font-sans">
+      <div class="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100 ">
+          <div class="relative sm:max-w-sm w-full">
+              <div class="card bg-blue-400 shadow-lg  w-full h-full rounded-3xl absolute  transform -rotate-6"></div>
+              <div class="card bg-red-400 shadow-lg  w-full h-full rounded-3xl absolute  transform rotate-6"></div>
+              <div class="relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md">
+                  <label for="" class="block mt-3 text-sm  text-center">
+                    <h2 class="my-6 text-2xl font-semibold text-black">
+                      Login
+                    </h2>
+                  </label>
+                  <form method="post" action="/login" class="mt-10">
+                                     
+                    <div class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 shadow-lg">
+                      <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                          class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600"
+                        >
+                          <i class="fas fa-user-circle"></i>
+                        </span>
+                      </div>
+                      <input
+                        type="text"
+                        name="username"
+                        id=""
+                        class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                        placeholder="Username"
+                      />
+                    </div>
+          
+                    <div class="flex flex-wrap items-stretch w-full relative h-15 bg-white items-center rounded mb-4 shadow-lg">
+                      <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                          class="flex items-center leading-normal bg-white rounded rounded-r-none text-xl px-3 whitespace-no-wrap text-gray-600"
+                          > 
+                          <i class="fas fa-lock"></i>
+                            </span
+                        >
+                      </div>
+                      <input
+                        type="password"
+                        name="password"
+                        id=""
+                        class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 px-3 relative self-center font-roboto text-xl outline-none"
+                        placeholder="Password"
+                      />
+                      <div class="flex -mr-px">
+                        <span
+                          class="flex items-center leading-normal bg-white rounded rounded-l-none border-0 px-3 whitespace-no-wrap text-gray-600"
+                          >
+                          </span>
+                      </div>
+                    </div>
+                      <!--<div class="mt-7 flex">
+                          <label for="remember_me" class="inline-flex items-center w-full cursor-pointer">
+                              <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+                              <span class="ml-2 text-sm text-gray-600">
+                                  Remember Me
+                              </span>
+                          </label>
+          
+                      </div>-->
+          
+                      <div class="mt-7">
+                          <button type="submit" class="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                              Submit
+                          </button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+      
+  </div>
+    <!--<form action="/login" method="post">
       <h2>Username</h2>
       <input type="text" name="username" id="" />
       <h2>Password</h2>
       <input type="text" name="password" id="" />
       <button type="submit">Submit</button>
-    </form>
+    </form>-->
   </body>
 </html>
