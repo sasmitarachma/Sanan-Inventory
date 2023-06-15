@@ -139,12 +139,13 @@
                     <tbody
                       class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
                     >
+                      <% var nomor = 1 %>
                       <% tampilLaporan.forEach((data)=> { %>
                       <tr class="text-gray-700 dark:text-gray-400">
                         <td class="px-4 py-3">
                           <div class="flex items-center text-sm">
                             <div>
-                              <p class="font-semibold"><%= data.id%></p>
+                              <p class="font-semibold"> <%= nomor++ %></p>
                             </div>
                           </div>
                         </td>
@@ -164,13 +165,13 @@
                 </div>
               </div>
             </div>
-            <div class="flex flex-row-reverse">
+            <!--<div class="flex flex-row-reverse">
               <button
                 class="mb-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-sage border border-transparent rounded-lg active:bg-green hover:bg-green focus:outline-none focus:shadow-outline-purple"
               >
                 <a href="sanan_dbnew (2).sql">Cetak Laporan </a>
               </button>
-            </div>
+            </div>-->
           </div>
         </main>
       </div>

@@ -363,7 +363,7 @@ export async function getTampilBarangKeluar(){
 }
 //tampil laporan
 export async function getTampilLaporan(tanggal_produksi, tanggal_expired){
-    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? OR tb_gudang.tanggal_produksi <= ?", [tanggal_produksi, tanggal_expired])
+    const [tanggal]= await pool.query("SELECT * FROM tb_gudang INNER JOIN tb_barang ON tb_gudang.id_barang = tb_barang.id INNER JOIN tb_barang_keluar ON tb_gudang.id = tb_barang_keluar.id_gudang WHERE tb_gudang.tanggal_produksi >= ? AND tb_gudang.tanggal_produksi <= ?", [tanggal_produksi, tanggal_expired])
     console.log(tanggal)
     return tanggal
 }
