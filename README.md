@@ -24,7 +24,7 @@ DB = 'sanan_dbnew' // nama db
 SECRET = 'confidential' // key untuk JWT
 ```
 
-3.  Import file **sanan_dbnew.sql**
+3.  Import file **sanan_dbnew.sql**, saat melakukan import hilangkan centang pada **Enable Foreign Key Checks**
 
 4.  buka command prompt pada folder tersebut dan jalankan perintah :
 
