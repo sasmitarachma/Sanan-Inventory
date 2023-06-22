@@ -38,7 +38,13 @@ npm i
 npm run dev
 ```
 
-6. Untuk login gunakan username dan password berikut :
+6. Buka browser, masukkan url ke search bar.
+
+```
+http://localhost:8080/
+```
+
+7. Untuk login gunakan username dan password berikut :
 
 ```
 // Admin
