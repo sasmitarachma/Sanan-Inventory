@@ -4,10 +4,10 @@ Sistem Informasi Inventori untuk UMKM Keripik Tempe Karina.
 
 ## Anggota Kelompok
 
-Elsi Puspitasari (2141762147)
-I Dewa Made Wira W.A (2141762062)
-Rizki Ridho Prasetyo (2141762130)
-Sasmita Rachmawati (2141762141)
+Elsi Puspitasari (2141762147)\
+I Dewa Made Wira W.A (2141762062)\
+Rizki Ridho Prasetyo (2141762130)\
+Sasmita Rachmawati (2141762141)\
 Syafa’at Akbar (2141762066)
 
 ## Langkah Instalasi
