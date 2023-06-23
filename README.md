@@ -41,7 +41,7 @@ npm run dev
 6. Buka browser, masukkan url ke search bar.
 
 ```
-http://localhost:8080/
+http://localhost:3000/
 ```
 
 7. Untuk login gunakan username dan password berikut :
